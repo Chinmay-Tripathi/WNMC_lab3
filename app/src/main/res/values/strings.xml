@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ImagePickerAndAnimations</string>
+    <string-array name="animation_list">
+        <item>Rotate</item>
+        <item>Zoom In</item>
+        <item>Zoom Out</item>
+        <item>Crop</item>
+    </string-array>
+</resources>

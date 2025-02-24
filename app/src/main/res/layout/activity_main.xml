@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp">
+
+    <!-- Button to pick an image -->
+    <Button
+        android:id="@+id/btnPickImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pick Image"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- ImageView to display selected image -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="20dp"
+        android:scaleType="centerInside" />
+
+    <!-- EditText for rotation angle -->
+    <EditText
+        android:id="@+id/etRotationAngle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Rotation Angle"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Button for rotating image -->
+    <Button
+        android:id="@+id/btnRotate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rotate Image"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- EditText for crop percentage -->
+    <EditText
+        android:id="@+id/etCropPercentage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Crop Percentage"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Button for cropping image -->
+    <Button
+        android:id="@+id/btnCrop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crop Image"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Button to save the edited image -->
+    <Button
+        android:id="@+id/btnSaveImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Image"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Buttons for zooming -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <!-- Button for zoom-in -->
+        <Button
+            android:id="@+id/btnZoomIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:layout_marginRight="10dp"/>
+
+        <!-- Button for zoom-out -->
+        <Button
+            android:id="@+id/btnZoomOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"/>
+    </LinearLayout>
+
+</LinearLayout>
