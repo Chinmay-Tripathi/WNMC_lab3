@@ -1,5 +1,6 @@
 package com.example.imagepickerandanimations;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -9,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
@@ -17,19 +17,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class MainActivity extends Activity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
-    private Button btnPickImage, btnZoomIn, btnZoomOut, btnRotate, btnCrop, btnSaveImage;
+    private Button btnPickImage, btnZoomIn, btnZoomOut, btnRotate, btnCrop, btnSaveImage, btnBluetoothTransfer;
     private EditText etRotationAngle, etCropPercentage;
     private Bitmap selectedBitmap;
     private float zoomFactor = 1.0f;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,7 @@ public class MainActivity extends Activity {
         btnRotate = findViewById(R.id.btnRotate);
         btnCrop = findViewById(R.id.btnCrop);
         btnSaveImage = findViewById(R.id.btnSaveImage);
+        btnBluetoothTransfer = findViewById(R.id.btnBluetoothTransfer);
         etRotationAngle = findViewById(R.id.etRotationAngle);
         etCropPercentage = findViewById(R.id.etCropPercentage);
 
@@ -92,6 +96,14 @@ public class MainActivity extends Activity {
                 saveImage();
             }
         });
+
+        // Bluetooth transfer on button click
+        btnBluetoothTransfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendImageViaBluetooth();
+            }
+        });
     }
 
     private void openGallery() {
@@ -106,14 +118,14 @@ public class MainActivity extends Activity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                String picturePath = cursor.getString(columnIndex);
-                selectedBitmap = BitmapFactory.decodeFile(picturePath);
-                imageView.setImageBitmap(selectedBitmap);
-                cursor.close();
+            try (Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null)) {
+                if (cursor != null) {
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    selectedBitmap = BitmapFactory.decodeFile(picturePath);
+                    imageView.setImageBitmap(selectedBitmap);
+                }
             }
         }
     }
@@ -180,17 +192,37 @@ public class MainActivity extends Activity {
 
     private void saveImage() {
         if (selectedBitmap != null) {
-            FileOutputStream outStream = null;
-            // Save the image to the gallery
-            String savedImageURL = MediaStore.Images.Media.insertImage(
-                    getContentResolver(), selectedBitmap, "Edited Image", "Edited image saved");
-            Uri savedImageURI = Uri.parse(savedImageURL);
-            Toast.makeText(this, "Image saved to gallery", Toast.LENGTH_SHORT).show();
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.TITLE, "Edited Image");
+            values.put(MediaStore.Images.Media.DESCRIPTION, "Edited image saved");
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            Uri uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            try (OutputStream outStream = getContentResolver().openOutputStream(uri)) {
+                selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+                Toast.makeText(this, "Image saved to gallery", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                Toast.makeText(this, "Error saving image", Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(this, "Select an image first", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void sendImageViaBluetooth() {
+        if (selectedBitmap == null) {
+            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Uri imageUri = getImageUri(selectedBitmap);
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        startActivity(Intent.createChooser(intent, "Share Image via Bluetooth"));
+    }
+
+    private Uri getImageUri(Bitmap bitmap) {
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Edited Image", null);
+        return Uri.parse(path);
+    }
 }
-
-
-

@@ -27,17 +27,9 @@
         android:id="@+id/etRotationAngle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Rotation Angle"
+        android:hint="Rotation Angle (°)"
         android:inputType="numberDecimal"
-        android:layout_marginBottom="20dp"/>
-
-    <!-- Button for rotating image -->
-    <Button
-        android:id="@+id/btnRotate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rotate Image"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="10dp"/>
 
     <!-- EditText for crop percentage -->
     <EditText
@@ -48,43 +40,45 @@
         android:inputType="numberDecimal"
         android:layout_marginBottom="20dp"/>
 
-    <!-- Button for cropping image -->
+    <!-- Buttons to apply actions -->
+    <Button
+        android:id="@+id/btnZoomIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zoom In"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btnZoomOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zoom Out"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btnRotate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rotate"
+        android:layout_marginBottom="10dp"/>
+
     <Button
         android:id="@+id/btnCrop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Crop Image"
-        android:layout_marginBottom="20dp"/>
+        android:text="Crop"
+        android:layout_marginBottom="10dp"/>
 
-    <!-- Button to save the edited image -->
     <Button
         android:id="@+id/btnSaveImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save Image"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="10dp"/>
 
-    <!-- Buttons for zooming -->
-    <LinearLayout
-        android:orientation="horizontal"
-        android:gravity="center"
+    <Button
+        android:id="@+id/btnBluetoothTransfer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <!-- Button for zoom-in -->
-        <Button
-            android:id="@+id/btnZoomIn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+"
-            android:layout_marginRight="10dp"/>
-
-        <!-- Button for zoom-out -->
-        <Button
-            android:id="@+id/btnZoomOut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-"/>
-    </LinearLayout>
-
+        android:layout_height="wrap_content"
+        android:text="Transfer Image via Bluetooth" />
 </LinearLayout>
